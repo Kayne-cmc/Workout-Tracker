@@ -1,0 +1,14 @@
+.Welcome {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.title {
+  display: flex;
+  margin: 20px 0;
+}
+
+.table {
+  width: 80%;
+}
