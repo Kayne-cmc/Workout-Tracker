@@ -4,56 +4,19 @@ import axios from 'axios';
 import Dumbell from '../dumbell.png';
 import './Welcome.css';
 
-// function Workout(props) {
-
-//   const [workout, setWorkout] = useState({
-//     _id: props.workout._id,
-//     name: props.workout.name,
-//     description: props.workout.description,
-//     sets: props.workout.sets,
-//     repetitions: props.workout.repetitions,
-//     completed: props.workout.completed
-//   });
-
-//   return(
-//     <tr className = {props.workout.completed ? 'table-success' : ''}>
-//       <td>{workout.name}</td>
-//       <td>{workout.description}</td>
-//       <td>{workout.sets}</td>
-//       <td>{workout.repetitions}</td>
-//       <td>{workout.completed ? 'Done' : 'Incomplete'}</td>
-//       <td>
-//         <Link to={'/edit/'+workout._id} style={{textDecoration: "none"}}>Edit</Link>
-//         <input type='checkbox' value={workout.completed} checked={workout.completed} onChange={(e) => {
-
-//           const newWorkout = {
-//             ...workout,
-//             completed: e.target.checked
-//           }
-
-//           setWorkout(newWorkout);
-
-//           axios.post('http://localhost:4000/workouts/edit/'+workout._id, newWorkout)
-//             .then(res => console.log(res.data))
-//             .catch(err => console.log(err));
-//         }} />
-//       </td>
-//     </tr>
-//   );
-// }
-
 function Welcome() {
 
   const [workoutList, setWorkoutList] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:4000/workouts')
-    .then(res => {
-      setWorkoutList(res.data);
-    })
-    .catch(err => {
-      console.log(err);
-    });
+    axios
+        .get('http://localhost:4000/workouts')
+        .then((res) => {
+            setWorkoutList(res.data);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
   }, []);
 
   return(
@@ -68,35 +31,39 @@ function Welcome() {
           <tr>
             <th>Name</th>
             <th>Description</th>
-            <th>Sets</th>
-            <th>Repetitions</th>
-            <th>Status</th>
-            <th>Actions</th>
+            <th className='center'>Sets</th>
+            <th className='center'>Repetitions</th>
+            <th className='center'>Status</th>
+            <th className='center'>Actions</th>
           </tr>
         </thead>
         <tbody>
-            {workoutList.map((workout, index) => (
-                <tr className = {workout.completed ? 'table-success' : ''}>
-                    <td>{workout.name}</td>
-                    <td>{workout.description}</td>
-                    <td>{workout.sets}</td>
-                    <td>{workout.repetitions}</td>
-                    <td>{workout.completed ? 'Done' : 'Incomplete'}</td>
-                    <td>
-                        <Link to={'/edit/'+workout._id} style={{textDecoration: "none"}}>Edit</Link>
-                        <input type='checkbox' value={workout.completed} checked={workout.completed} onChange={(e) => {
-                            const newWorkout = {
-                                ...workout,
-                                completed: e.target.checked
-                            }
-                            setWorkoutList(newWorkout);
-            
-                        axios.post('http://localhost:4000/workouts/edit/'+workout._id, newWorkout)
-                            .then(res => console.log(res.data))
-                            .catch(err => console.log(err));
-                        }} />
-                    </td>
-                </tr>
+            {workoutList[0] &&
+                workoutList.map((workout, index) => (
+                    <tr className = {workout.completed ? 'table-success' : ''}>
+                        <td>{workout.name}</td>
+                        <td>{workout.description}</td>
+                        <td className='center'>{workout.sets}</td>
+                        <td className='center'>{workout.repetitions}</td>
+                        <td className='center'>{workout.completed ? 'Done' : 'Incomplete'}</td>
+                        <td className='center'>
+                            <Link to={'/edit/'+workout._id} style={{textDecoration: "none", marginRight:'10px'}}>Edit</Link>
+                            <input
+                                type='checkbox'
+                                value={workout.completed}
+                                checked={workout.completed}
+                                onChange={(e) => {
+                                    const newWorkoutList = [...workoutList];
+                                    newWorkoutList[index].completed = e.target.checked;
+                                    setWorkoutList(newWorkoutList);
+                
+                                axios
+                                    .post('http://localhost:4000/workouts/edit/'+workout._id, newWorkoutList[index])
+                                    .then((res) => console.log(res.data))
+                                    .catch((err) => console.log(err));
+                            }} />
+                        </td>
+                    </tr>
             ))}
         </tbody>
       </table>

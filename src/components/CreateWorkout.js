@@ -23,26 +23,62 @@ function CreateWorkout(props) {
     e.preventDefault();
 
     axios.post('http://localhost:4000/workouts/create', workout)
-      .then(res => console.log(res.data))
+      .then(res => {
+          console.log(res.data);
+          props.history.push('/');
+      })
       .catch(err => console.log(err));
 
     setWorkout(blankWorkout);
-
-    props.history.push('/');
   }
 
   return(
-    <form onSubmit={submitWorkout}>
-      <input type='text' name='name' placeholder='Name' onChange={changeWorkout}></input><br></br>
-      <input type='text' name='description' placeholder='Description' onChange={changeWorkout}></input><br></br>
+        <div className='CreateWorkout'>
+            <h3>Create Workout</h3>
+            <form onSubmit={submitWorkout}>
+                <div className='form-group'>
+                    <input
+                        type='text'
+                        value={workout.name}
+                        name='name'
+                        className='form-control'
+                        placeHolder='Name'
+                        onChange={changeWorkout} />
+                </div>
+                <div className='form-group'>
+                    <textarea
+                        value={workout.description}
+                        name='description'
+                        className='form-control'
+                        placeHolder='Description'
+                        rows='5'
+                        onChange={changeWorkout} />
+                </div>
+                <div className='form-group'>
+                    <label htmlFor='sets'>Sets</label>
+                    <input
+                        type='number'
+                        id='sets'
+                        name='sets'
+                        value={workout.sets}
+                        className='form-control'
+                        onChange={changeWorkout} />
+                </div>
+                <div className='form-group'>
+                    <label htmlFor='repetitions'>Repetitions</label>
+                    <input
+                        type='number'
+                        id='repetitions'
+                        name='repetitions'
+                        value={workout.repetitions}
+                        className='form-control'
+                        onChange={changeWorkout} />
+                </div>
 
-      <label htmlFor='Sets'>Sets</label>
-      <input type='number' id='Sets' name='sets' placeholder='0' onChange={changeWorkout}></input><br></br>
-      <label htmlFor='Repetitions'>Repetitions</label>
-      <input type='number' id='Repetitions' name='repetitions' placeholder='0' onChange={changeWorkout}></input><br></br>
-
-      <button type='submit'>Create Workout</button>
-    </form>
+            <button type='submit' className='btn btn-outline-primary'>Create Workout</button>
+            </form>
+      </div>
+    
   );
 }
 
